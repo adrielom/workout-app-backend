@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String             @id @default(uuid())
+  name             String
+  token            String?            @unique
+  hash             String?            @unique
+  salt             String?            @unique
+  email            String             @unique
+  UserExerciseSets UserExerciseSets[]
+}
+
+model UserExerciseSets {
+  user          User        @relation(fields: [userId], references: [id])
+  exercise_set  ExerciseSet @relation(fields: [exerciseSetId], references: [id])
+  userId        String
+  exerciseSetId String
+
+  @@id([userId, exerciseSetId])
+}
+
+model Exercise {
+  id                String       @id @default(uuid())
+  categorie         Category[]
+  repetition        Int?
+  target_repetition Int?
+  rests             Float?
+  delay             Float?
+  calories_burned   Float?
+  time              Int?
+  image_url         String?
+  description       String?
+  ExerciseSet       ExerciseSet? @relation(fields: [exerciseSetId], references: [id])
+  exerciseSetId     String?
+}
+
+model Category {
+  id         String    @id @default(uuid())
+  name       String    @unique
+  Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
+  exerciseId String?
+}
+
+model Video {
+  id          String @id @default(uuid())
+  name        String
+  video_url   String
+  video_start Int
+  video_end   Int
+}
+
+model ExerciseSet {
+  id               String             @id @default(uuid())
+  exercises        Exercise[]
+  UserExerciseSets UserExerciseSets[]
+}
