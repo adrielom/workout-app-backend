@@ -1,9 +1,9 @@
 import { PrismaService } from '../services/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService, UserDTO } from '../services/user.service';
+import { UserService, IUserDTO, IUsersDTO } from '../services/user.service';
 import { UserController } from './user.controller';
 
-describe('AppController', () => {
+describe('UsersController Test Module', () => {
   let userController: UserController;
 
   beforeEach(async () => {
@@ -16,14 +16,13 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('Should return a list of Users of type UserDTO', async () => {
+    it('Should return a list of Users of type UsersDTO', async () => {
       const arrayOfUsers = [
         {
           id: '4a21871c-37b9-421b-aec5-5e8c84d5cd47',
           email: 'adriel@gmail.com',
-          token: 'blablabla',
         },
-      ] as Array<UserDTO>;
+      ] as Array<IUsersDTO>;
 
       expect(await userController.getUsers()).toBeTruthy();
 
